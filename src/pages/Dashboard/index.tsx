@@ -16,6 +16,7 @@ import { Folga } from "../../interfaces/Folga";
 import { Usuario } from "../../interfaces/Usuario";
 import { Escala } from "../../interfaces/Escala";
 import TabelaFolga from "../../components/TabelaFolga";
+import usuarioStore from "../../stores/usuario.store";
 
 
 export default function Dashboard() {
@@ -37,13 +38,14 @@ export default function Dashboard() {
         const resultado = await pegarDadosUsuarios(storedMikeId);
         if (resultado) {
           setDadosUsuarios(resultado);
+          usuarioStore.atualizaFuncionario(dadosUsuarios)
         }
       } catch (error) {
         console.error("Erro ao buscar dados do usuário:", error);
       }
     }
     fetchData();
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     async function folgaData() {

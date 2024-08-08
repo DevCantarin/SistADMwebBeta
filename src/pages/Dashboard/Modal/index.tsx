@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Checkbox, FormControlLabel, FormGroup, Modal, Switch } from '@mui/material';
+import { useEffect, useState } from "react";
+import { Radio, FormControlLabel, FormGroup, Modal, RadioGroup } from '@mui/material';
 import { Box } from "@mui/material";
 import Titulo from "../../../components/Titulo";
 import styled from "styled-components";
@@ -9,6 +9,9 @@ import Subtitulo from "../../../components/Subtitulo";
 import IMike from "../../../types/IMIKE";
 import usePost from "../../../usePost";
 import autenticaStore from "../../../stores/autentica.store";
+import usuarioStore from "../../../stores/usuario.store";
+import { pegarDadosUsuarios } from "../../../servicos/UsuarioServico";
+import { Usuario } from "../../../interfaces/Usuario";
 
 const BoxCustomizado = styled(Box)`
   position: fixed;
@@ -26,65 +29,51 @@ const BoxCustomizado = styled(Box)`
 
 const Container = styled.div`
 text-align: left;
-`
-
-const ContainerSwitch = styled.div`
-text-align: center;
-`
-
-const TextoSwitch = styled.p`
-color: var(--cinza);
-`
+`;
 
 const BotaoCustomizado = styled(Botao)`
     width: 50%;
     display: block;
     margin: 0 auto;
-`
-
-const ContainerEndereco = styled.div`
-display: grid;
-grid-template-columns: 2fr 1fr;
-grid-gap: 0 1em;
-`
+`;
 
 export default function ModalCadastro({ open, handleClose }: { open: boolean, handleClose: () => void }) {
-    const [planosSelecionados, setPlanosSelecionados] = useState<string[]>([]);
+    const [motivoFolga, setMotivoFolga] = useState('');
     const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
-    const [senha, setSenha] = useState("");
-    const [senhaVerificada, setSenhaVerificada] = useState("");
-    const [possuiPlano, setPossuiPlano] = useState(false);
-    const [imagem, setImagem] = useState('');
-    const [especialidade, setEspecialidade] = useState("");
-    const [crm, setCrm] = useState("");
-    const [cep, setCep] = useState("");
-    const [rua, setRua] = useState("");
-    const [numero, setNumero] = useState("");
-    const [complemento, setComplemento] = useState("");
-    const [estado, setEstado] = useState("");
-    const [telefone, setTelefone] = useState("");
-    const label = { inputProps: { 'aria-label': 'Atende por plano?' } };
+    const [quantidade, setQuantidade] = useState("");
+    const [dataFolga, setDataFolga] = useState("");
     const {cadastrarDados} = usePost();
     const {usuario} = autenticaStore;
+    const [dadosUsuarios, setDadosUsuarios] = useState<Usuario>({} as Usuario);
+    const [mikeId, setMikeId] = useState('');
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const checkboxValue = event.target.value;
-        if (event.target.checked) {
-            setPlanosSelecionados([...planosSelecionados, checkboxValue]);
-        } else {
-            setPlanosSelecionados(planosSelecionados.filter(plano => plano !== checkboxValue));
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const storedMikeId = await autenticaStore.usuario.id;
+                if (!storedMikeId) return;
+
+                setMikeId(storedMikeId);
+
+                const resultado = await pegarDadosUsuarios(storedMikeId);
+                if (resultado) {
+                    setDadosUsuarios(resultado);
+                    usuarioStore.atualizaFuncionario(dadosUsuarios)
+                }
+            } catch (error) {
+                console.error("Erro ao buscar dados do usuário:", error);
+            }
         }
-    };
+        fetchData();
+    }, []);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const mike: IMike = {
             nome: nome,
-            senha: senha,
-            
-        }
+            senha: '',
+        };
 
         await cadastrarDados({url: "especialista", dados: mike, token: usuario.token})
     }
@@ -101,78 +90,34 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
                     <Titulo>Cadastre o especialista inserindo os dados abaixo:</Titulo>
                     <form onSubmit={handleSubmit}>
                         <Container>
-                            <CampoDigitacao tipo="text" label="Nome" valor={nome} placeholder="Digite seu nome completo" onChange={setNome} />
-                            <CampoDigitacao tipo="email" label="Email" valor={email} placeholder="Digite seu email" onChange={setEmail} />
-                            <CampoDigitacao tipo="password" label="Senha" valor={senha} placeholder="Digite sua senha" onChange={setSenha} />
-                            <CampoDigitacao tipo="password" label="Repita a senha" valor={senhaVerificada} placeholder="Digite sua senha novamente" onChange={setSenhaVerificada} />
-                            <CampoDigitacao tipo="text" label="Especialidade" valor={especialidade} placeholder="Qual sua especialidade?" onChange={setEspecialidade} />
-                            <CampoDigitacao tipo="number" label="CRM" valor={crm} placeholder="Insira seu número de registro" onChange={setCrm} />
-                            <CampoDigitacao tipo="tel" label="Telefone" valor={telefone} placeholder="(DDD) XXXXX-XXXX" onChange={setTelefone} />
-                            <CampoDigitacao tipo="text" label="Insira a URL da sua imagem" valor={imagem} placeholder="https://img.com/fotos/retrato-de-um-jovem-medico" onChange={setImagem} />
-
-                            <CampoDigitacao
-                                tipo="number"
-                                label="Endereço"
-                                valor={cep}
-                                placeholder="Insira o CEP"
-                                onChange={setCep}
-                            />
-                            <ContainerEndereco>
-                                <CampoDigitacao
-                                    tipo="text"
-                                    valor={rua}
-                                    placeholder="Rua"
-                                    onChange={setRua}
-                                />
-                                <CampoDigitacao
-                                    tipo="number"
-                                    valor={numero}
-                                    placeholder="Número"
-                                    onChange={setNumero}
-                                />
-                                <CampoDigitacao
-                                    tipo="text"
-                                    valor={complemento}
-                                    placeholder="Complemento"
-                                    onChange={setComplemento}
-                                />
-                                <CampoDigitacao
-                                    tipo="text"
-                                    valor={estado}
-                                    placeholder="Estado"
-                                    onChange={setEstado}
-                                />
-                            </ContainerEndereco>
+                            <CampoDigitacao tipo="text" label="Nome" valor={usuarioStore.usuario.nome} placeholder="Digite o completo"/>
+                            <CampoDigitacao tipo="email" label="Email" valor={usuarioStore.usuario.email} placeholder="Digite o email"/>
+                            <CampoDigitacao tipo="text" label="Graduação" valor={usuarioStore.usuario.grad} placeholder="Digite a graduação "/>
+                            <CampoDigitacao tipo="text" label="RE" valor={`${usuarioStore.usuario.re}-${usuarioStore.usuario.dig}`} placeholder="Insira o RE com Digito '123456-7'"/>
+                            <CampoDigitacao tipo="date" label="Data do inicio da Folga" valor={dataFolga} placeholder="Digite a data de inicio da Folga" onChange={setDataFolga} />
+                            <CampoDigitacao tipo="text" label="Quantidade de Dias" valor={quantidade} placeholder="digite a quantidade de dias de Folga" onChange={setQuantidade} />
+                            <Subtitulo>Selecione o Motivo da Folga:</Subtitulo>
+                            <FormGroup>
+                                <RadioGroup value={motivoFolga} onChange={(e) => setMotivoFolga(e.target.value)}>
+                                    <FormControlLabel control={<Radio />} label="JUNÇÃO DE MEIOS" value="JUNÇÃO DE MEIOS" />
+                                    <FormControlLabel control={<Radio />} label="DISPENSA DO SERVIÇO" value="DISPENSA DO SERVIÇO" />
+                                    <FormControlLabel control={<Radio />} label="FOLGA MENSAL BG 101/23" value="FOLGA MENSAL BG 101/23" />
+                                    <FormControlLabel control={<Radio />} label="LUTO" value="LUTO" />
+                                    <FormControlLabel control={<Radio />} label="PATERNIDADE" value="PATERNIDADE" />
+                                    <FormControlLabel control={<Radio />} label="NUPCIAS" value="NUPCIAS" />
+                                    <FormControlLabel control={<Radio />} label="MEIO EXPEDIENTE - 08:00 - 13:00" value="MEIO EXPEDIENTE - 08:00 - 13:00" />
+                                    <FormControlLabel control={<Radio />} label="MEIO EXPEDIENTE - 13:00 - 18:00" value="MEIO EXPEDIENTE - 13:00 - 18:00" />
+                                    <FormControlLabel control={<Radio />} label="LSV" value="LSV" />
+                                    <FormControlLabel control={<Radio />} label="ANIVERSÁRIO" value="ANIVERSÁRIO" />
+                                    <FormControlLabel control={<Radio />} label="COMPENSAÇÃO OPERACIONAL" value="COMPENSAÇÃO OPERACIONAL" />
+                                    <FormControlLabel control={<Radio />} label="FOLGA FLAGRANTE" value="FOLGA FLAGRANTE" />
+                                </RadioGroup>
+                            </FormGroup>
                         </Container>
-
-                        <ContainerSwitch>
-                            <Subtitulo>Atende por plano?</Subtitulo>
-                            <Switch {...label} onChange={() => {
-                                possuiPlano ?
-                                    setPossuiPlano(false) :
-                                    setPossuiPlano(true)
-                            }
-                            } />
-                            <TextoSwitch>Não/Sim</TextoSwitch>
-                        </ContainerSwitch>
-                        {possuiPlano ?
-                            <>
-                                <Subtitulo>Selecione os planos:</Subtitulo>
-                                <FormGroup>
-                                    <FormControlLabel control={<Checkbox onChange={handleChange} value="Sulamerica" />} label="Sulamerica" />
-                                    <FormControlLabel control={<Checkbox onChange={handleChange} value="Unimed" />} label="Unimed" />
-                                    <FormControlLabel control={<Checkbox onChange={handleChange} value="Bradesco" />} label="Bradesco" />
-                                    <FormControlLabel control={<Checkbox onChange={handleChange} value="Amil" />} label="Amil" />
-                                    <FormControlLabel control={<Checkbox onChange={handleChange} value="Biosaúde" />} label="Biosaúde" />
-                                    <FormControlLabel control={<Checkbox onChange={handleChange} value="Biovida" />} label="Biovida" />
-                                    <FormControlLabel control={<Checkbox onChange={handleChange} value="Outro" />} label="Outro" />
-                                </FormGroup>
-                            </>
-                            : ''}
                         <BotaoCustomizado>Cadastrar</BotaoCustomizado>
                     </form>
                 </BoxCustomizado>
-            </Modal >
+            </Modal>
         </>
     );
 }

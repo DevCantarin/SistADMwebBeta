@@ -34,5 +34,5 @@ export interface Usuario {
   cep: String;
   telefone: String;
   imagem: String;
-  senha: String;
+  senha?: String;
 }
