@@ -1,3 +1,4 @@
+import axios from "axios";
 import api from "./api";
 import apiDispensas from "./apiDispensass";
 
@@ -17,17 +18,21 @@ export async function pegarTodasAsFolgas(){
 
 export async function agendarFolgas(data: Date, gradId:string, reId: string, nomeId: string, motivoId:string, quantidadeId:string){
   try {
-    const resultado = await api.post('https://script.google.com/macros/s/AKfycbx14ryxxPommBuT-JlF0PjfX2rMCIYiuPMtCy1wm_EKBQUU1w0KBHhdr4dPdzrtMeM/exec', {
+    const apiCadastraFolga = axios.create({
+      baseURL: "https://script.google.com/macros/s/AKfycbwRQj96ZnzcUA79rY3guh1_80ijdIsM6v2vtgWjpr6zeBlWIAfOLRSkq95aFMFY6go/exec"
+      // baseURL: "exp://192.168.15.12:19000"
+    })
+    const resultado = await apiCadastraFolga.post('https://script.google.com/macros/s/AKfycbwRQj96ZnzcUA79rY3guh1_80ijdIsM6v2vtgWjpr6zeBlWIAfOLRSkq95aFMFY6go/exec', {
       GRAD: gradId,
       RE: reId,
       DATA: data,
       NOME: nomeId,
       MOTIVO: motivoId,
       QUANTIDADE: quantidadeId
-    }, {
     });
-
+    console.log(resultado.data)
     return resultado.data
+
   }
   catch(error){
     console.log(error);

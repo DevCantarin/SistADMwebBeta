@@ -12,6 +12,7 @@ import autenticaStore from "../../../stores/autentica.store";
 import usuarioStore from "../../../stores/usuario.store";
 import { pegarDadosUsuarios } from "../../../servicos/UsuarioServico";
 import { Usuario } from "../../../interfaces/Usuario";
+import { agendarFolgas } from "../../../servicos/FolgasServico";
 
 const BoxCustomizado = styled(Box)`
   position: fixed;
@@ -39,7 +40,6 @@ const BotaoCustomizado = styled(Botao)`
 
 export default function ModalCadastro({ open, handleClose }: { open: boolean, handleClose: () => void }) {
     const [motivoFolga, setMotivoFolga] = useState('');
-    const [nome, setNome] = useState("");
     const [quantidade, setQuantidade] = useState("");
     const [dataFolga, setDataFolga] = useState("");
     const {cadastrarDados} = usePost();
@@ -69,13 +69,12 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        const mike: IMike = {
-            nome: nome,
-            senha: '',
-        };
-
-        await cadastrarDados({url: "especialista", dados: mike, token: usuario.token})
+        try {
+           const folgaAgendada= await agendarFolgas(new Date(dataFolga),usuarioStore.usuario.grad,usuarioStore.usuario.re,usuarioStore.usuario.nome,motivoFolga,quantidade)
+           folgaAgendada && alert("Folga Agendada, Stive")
+        } catch (error) {
+            alert(`Deu RUIM ${error}`)
+        }
     }
 
     return (
