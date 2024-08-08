@@ -1,11 +1,11 @@
 export interface Usuario {
-  id: string;
+  id?: string;
   nome: string;
   email: string;
   grad: string;
   re: string;
   dig: string;
-  funcao: string;
+  funcao?: string;
   pai: string;
   mae: string;
   admissao: string;
@@ -33,6 +33,6 @@ export interface Usuario {
   bairro: String;
   cep: String;
   telefone: String;
-  imagem: String;
+  imagem?: String;
   senha?: String;
 }

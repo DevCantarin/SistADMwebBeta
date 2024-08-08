@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-// import logo from './assets/logo.png';
+import logo from './assets/logo.png';
 import perfil from './assets/perfil.png';
 import pesquisa from './assets/search.png';
 import autenticaStore from '../../stores/autentica.store';
+
 
 
 const CabecalhoEstilizado = styled.header`
@@ -61,6 +62,10 @@ color: var(--branco);
 text-decoration: none;
 `
 
+const LogoEstilizado = styled.img`
+    width: 100px;
+    height: 100px;
+`
 
 function Cabecalho() {
     const handleLogout = () => {
@@ -69,7 +74,7 @@ function Cabecalho() {
 
     return (
         <CabecalhoEstilizado>
-            {/* <img src={logo} alt="logo da empresa Voll" /> */}
+            <LogoEstilizado src={logo} alt="do 14º BPM/M" />
             <Container>
                 {autenticaStore.estaAutenticado
                     ? <>
