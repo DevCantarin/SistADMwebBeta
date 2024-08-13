@@ -35,4 +35,5 @@ export interface Usuario {
   telefone: String;
   imagem?: String;
   senha?: String;
+  token?: String;
 }

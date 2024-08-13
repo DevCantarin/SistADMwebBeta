@@ -100,6 +100,7 @@ export default function Dashboard() {
   return (
     <Container>
       <Titulo>Área Administrativa</Titulo>
+      <p>{usuarioStore.usuario.nome} </p>
       <Botao onClick={handleOpen}>Solicitar Folga</Botao>
       <ModalCadastro open={open} handleClose={handleClose} />
       <Titulo imagem="consulta">Escalas Previstas</Titulo>

@@ -3,6 +3,7 @@ import logo from './assets/logo.png';
 import perfil from './assets/perfil.png';
 import pesquisa from './assets/search.png';
 import autenticaStore from '../../stores/autentica.store';
+import usuarioStore from '../../stores/usuario.store';
 
 
 
@@ -78,6 +79,7 @@ function Cabecalho() {
             <Container>
                 {autenticaStore.estaAutenticado
                     ? <>
+                        <p>{usuarioStore.usuario.nome}</p>
                         <img src={perfil} alt="imagem de perfil do usuário" />
                         <LinkEstilizado href="/" onClick={handleLogout}>Sair</LinkEstilizado>
                     </>

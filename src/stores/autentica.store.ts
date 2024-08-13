@@ -1,3 +1,4 @@
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import { makeObservable, observable, action } from "mobx";
 
 interface IUsuario {
@@ -44,8 +45,22 @@ class AutenticaStore {
         const data = localStorage.getItem("authStore");
         if (data) {
             const { estaAutenticado, usuario } = JSON.parse(data);
-            this.estaAutenticado = estaAutenticado;
+
             this.usuario = usuario;
+            this.estaAutenticado = estaAutenticado;
+
+            try {
+                const decoded = jwtDecode<JwtPayload>(this.usuario.token);
+                if (decoded.exp) {
+                    const currentTime = Math.floor(Date.now() / 1000);
+                    if (decoded.exp < currentTime) {
+                        this.estaAutenticado = false;
+                    }
+                }
+            } catch (error) {
+                console.error("Erro ao decodificar o token:", error);
+                this.estaAutenticado = false;
+            }
         }
     }
 }

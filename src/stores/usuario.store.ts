@@ -7,7 +7,7 @@ class UsuarioStore {
         email: "", admissao: "", bairro: "", bigodes: "", cabelo: "", carteira_trabalho: "", cat: "", id: "",
         cep: "", cidade: "", cnh: "", conjuge: "", cor: "", cpf: "", dependentes: "", dig: "", estado: "",
         funcao: "", grad: "", imagem: "", mae: "", nascimento: "", nome: "", nome_completo: "", olhos: "",
-        pai: "", pasep: "", pis: "", re: "", residencia: "", rg: "", sangue: "", sat: "", telefone: "", val: ""
+        pai: "", pasep: "", pis: "", re: "", residencia: "", rg: "", sangue: "", sat: "", telefone: "", val: "", token:""
     };
 
     constructor() {
