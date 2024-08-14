@@ -13,6 +13,7 @@ import usuarioStore from "../../../stores/usuario.store";
 import { pegarDadosUsuarios } from "../../../servicos/UsuarioServico";
 import { Usuario } from "../../../interfaces/Usuario";
 import { agendarFolgas } from "../../../servicos/FolgasServico";
+import converterData from "../../../utils/ConverterData";
 
 const BoxCustomizado = styled(Box)`
   position: fixed;
@@ -70,8 +71,13 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-           const folgaAgendada= await agendarFolgas(new Date(dataFolga),usuarioStore.usuario.grad,usuarioStore.usuario.re,usuarioStore.usuario.nome,motivoFolga,quantidade)
-           folgaAgendada && alert("Folga Agendada, Stive")
+             if(new Date(dataFolga) <=new Date()){
+                alert("A Data da Folga deve Ser Para o Futuro")
+                 return
+            } 
+
+            
+            
         } catch (error) {
             alert(`Deu RUIM ${error}`)
         }

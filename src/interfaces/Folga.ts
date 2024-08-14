@@ -7,5 +7,5 @@ export interface Folga {
   MOTIVO: any;
   JUSTIFICATIVA: any;
   QUANTIDADE: any;
-  APROVACAO: any;
+  APROVA: any;
 }

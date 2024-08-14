@@ -21,9 +21,9 @@ export async function pegarEscalasUsuario(re: string) {
       }
     });
 
-    console.log("O RE é  escalas" + re);
-    console.log(`Resultado é ${JSON.stringify(resultado.data.escalasRE)}`);
-    console.log(`achou escala`)
+    // console.log("O RE é  escalas" + re);
+    // console.log(`Resultado é ${JSON.stringify(resultado.data.escalasRE)}`);
+    // console.log(`achou escala`)
     return resultado.data.escalasRE;
   } catch (error) {
     console.log(error);

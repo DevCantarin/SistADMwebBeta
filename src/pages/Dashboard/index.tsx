@@ -17,6 +17,7 @@ import { Usuario } from "../../interfaces/Usuario";
 import { Escala } from "../../interfaces/Escala";
 import TabelaFolga from "../../components/TabelaFolga";
 import usuarioStore from "../../stores/usuario.store";
+import converterData from "../../utils/ConverterData";
 
 
 export default function Dashboard() {
@@ -26,6 +27,9 @@ export default function Dashboard() {
   const [folgasfuturas, setFolgasFuturas] = useState<Folga[]>([]);
   const [dadosUsuarios, setDadosUsuarios] = useState<Usuario>({} as Usuario);
   const [dadosEscalas, setDadosEscalas] = useState<Escala[]>([]);
+
+
+
 
   useEffect(() => {
     async function fetchData() {
@@ -57,11 +61,12 @@ export default function Dashboard() {
         const resultado = await pegarFolgasUsuario(`${dadosUsuarios.re}-${dadosUsuarios.dig}`);
         if (resultado) {
           setFolgasAgendadas(resultado);
-  
-          // Filtra apenas as folgas futuras
-          const folgasFuturas = resultado.filter((folga:Folga) => {
-            const folgaData = new Date(folga.DATA);
-            return folgaData >= new Date();
+
+        const folgasFuturas = resultado.filter((folga: Folga) => {
+          // Converte a data para o formato Date
+          const folgaData = converterData(folga.DATA);
+          // Verifica se a data da folga é maior ou igual à data atual
+          return folgaData >= new Date();
           });
   
           setFolgasFuturas(folgasFuturas);
@@ -100,7 +105,7 @@ export default function Dashboard() {
   return (
     <Container>
       <Titulo>Área Administrativa</Titulo>
-      <Botao onClick={handleOpen}>Solicitar Folga</Botao>
+      {dadosUsuarios.funcao !== "RP" && <Botao onClick={handleOpen}>Solicitar Folga</Botao>}
       <ModalCadastro open={open} handleClose={handleClose} />
       <Titulo imagem="consulta">Escalas Previstas</Titulo>
       <Tabela escala={dadosEscalas} />

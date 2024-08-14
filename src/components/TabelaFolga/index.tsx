@@ -60,10 +60,10 @@ function TabelaFolga({ folga }: { folga: Folga[] | null }) {
                                 <CelulaEstilizada>{linha.GRAD}</CelulaEstilizada>
                                 <CelulaEstilizada>{linha.RE}</CelulaEstilizada>
                                 <CelulaEstilizada>{linha.NOME}</CelulaEstilizada>
-                                <CelulaEstilizada>{formatDate(linha.DATA)}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.DATA}</CelulaEstilizada>
                                 <CelulaEstilizada>{linha.QUANTIDADE}</CelulaEstilizada>
                                 <CelulaEstilizada>{linha.MOTIVO}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.APROVACAO}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.APROVA}</CelulaEstilizada>
                             </LinhaEstilizada>
                         ]
                     ))}

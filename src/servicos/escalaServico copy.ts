@@ -16,16 +16,16 @@ export async function pegarEscalasUsuario(re: string) {
   }
 
   try {
-    const resultado = await api.get("/gdescalas", {
+    const resultado = await api.get(`/gdispensas/re/${re}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
 
-    console.log("O RE é  escalas" + re);
-    console.log(`Resultado é ${JSON.stringify(resultado.data.escalasRE[0])}`);
-    console.log(`achou escala`)
-    return resultado.data.escalasRE;
+    // console.log("O RE é  escalas" + re);
+    // console.log(`Resultado é ${JSON.stringify(resultado.data.folgasRE[0])}`);
+    // console.log(`achou escala`)
+    return resultado.data.folgasRE;
   } catch (error) {
     console.log(error);
     return null;

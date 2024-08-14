@@ -113,7 +113,7 @@ export async function pegarFolgasUsuario(re: string) {
   const token = await autenticaStore.usuario.token;
 
   if (!token) {
-    console.log('Token não encontrado no armazenamento local. ');
+    console.log('Token não encontrado no armazenamento local.');
     return null;
   }
 
@@ -123,23 +123,21 @@ export async function pegarFolgasUsuario(re: string) {
   }
 
   try {
-    const url = `https://script.google.com/macros/s/AKfycbw2wgOYgJ5s0BvcEaVXDWDChclWxVsPKJmR7wcAdO-NiiPHlKpjtpSgPAA0bsEMcB4/exec?re=${encodeURIComponent(re)}`;
-    // console.log(`o re que eu estou procurando é ${encodeURIComponent(re)}`)
-    // console.log( `o endpoint chamdo foi ${url}`)
-    const resultado = await apiDispensas.get(url, {
+    const resultado = await api.get(`/gdispensas/re/${re}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
-    // console.log(`Chamando o endpoint DE FOLGA: ${url}`);
-    // console.log("O RE é " + re);
-    // console.log(`Resultado é DISPENSAS ${JSON.stringify(resultado.data.reornoDaSaida[0])}`);
-    // console.log(`o resultado de folgas   é ${JSON.stringify(resultado.data.reornoDaSaida[0])}`)
-    return resultado.data.reornoDaSaida;
+    // console.log("O RE é  escalas" + re);
+    // console.log(`Resultado é ${JSON.stringify(resultado.data.folgasRE[0])}`);
+    return resultado.data.folgasRE;
   } catch (error) {
-    console.log( "deu erro na chamada de folgas")
     console.log(error);
     return null;
   }
 }
+
 
 // export async function pegarFeriasUsuario(re: string) {
 //   const token = await autenticaStore.usuario.token;
