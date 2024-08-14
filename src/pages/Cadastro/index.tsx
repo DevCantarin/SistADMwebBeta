@@ -131,7 +131,8 @@ export default function Cadastro() {
             sangue:sangue,
             sat:sat,
             telefone:telefone,
-            val:val,            
+            val:val,
+            funcao:"RP"            
         }
 
         if (etapaAtiva !== 0) {
