@@ -1,6 +1,13 @@
-import apiSheets from './apiSheets';
+import api from './api';
+import autenticaStore from '../stores/autentica.store';
 
 export async function pegarEscalasUsuario(re: string) {
+  const token = await autenticaStore.usuario.token;
+
+  if (!token) {
+    console.log('Token não encontrado no armazenamento local.');
+    return null;
+  }
 
   if (!re) {
     console.log("re Nulo");
@@ -8,15 +15,16 @@ export async function pegarEscalasUsuario(re: string) {
   }
 
   try {
-    const url = `https://script.google.com/macros/s/AKfycbxnTVnngDBdRdOrUC4nC7C-446RfotrlbmuylPo2LRdqQmGZHUnvURCOYqj-mDAKSo/exec?re=${encodeURIComponent(re)}`;
-    const resultado = await apiSheets.get(url, {
+    const resultado = await api.get(`/gdescalas/re/${re}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
-    console.log(`Chamando o endpoint: ${url}`);
     console.log("O RE é  escalas" + re);
-    console.log(`Resultado é ${JSON.stringify(resultado.data.reornoDaSaida[0])}`);
+    console.log(`Resultado é ${JSON.stringify(resultado.data.escalasRE)}`);
     console.log(`achou escala`)
-    return resultado.data.reornoDaSaida;
+    return resultado.data.escalasRE;
   } catch (error) {
     console.log(error);
     return null;

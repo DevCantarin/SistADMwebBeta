@@ -54,35 +54,35 @@ function Tabela({ escala }: { escala: Escala[] | null }) {
                         [
                             <LinhaEstilizada key={`${index}-1`}>
                                 <CelulaEstilizada component="th" scope="row">
-                                    {formatDate(linha.Data)}
+                                    {linha.DATA}
                                 </CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Inicio!==""?`de ${linha.Inicio} as ${linha.Termino}`:""}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Nome}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Funcao}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.INICIO?`de ${linha.INICIO} as ${linha.TERMINO}`:""}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.NOME}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.FUNÇÃO}</CelulaEstilizada>
                             </LinhaEstilizada>,
                             <LinhaEstilizada key={`${index}-2`}>
                                 <CelulaEstilizada component="th" scope="row">
-                                    {formatDate(linha.Data2)}
+                                    {linha.DATA2}
                                 </CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Inicio2!==""?`de ${linha.Inicio2} as ${linha.Termino2}`:""}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Nome2}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Funcao2}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.INICIO2?`de ${linha.INICIO2} as ${linha.TERMINO2}`:""}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.NOME2}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.FUNÇÃO2}</CelulaEstilizada>
                             </LinhaEstilizada>,
                             <LinhaEstilizada key={`${index}-3`}>
                                 <CelulaEstilizada component="th" scope="row">
-                                    {formatDate(linha.Data3)}
+                                    {linha.DATA3}
                                 </CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Inicio3!==""?`de ${linha.Inicio3} as ${linha.Termino3}`:""}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Nome3}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Funcao3}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.INICIO3?`de ${linha.INICIO3} as ${linha.TERMINO3}`:""}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.NOME3}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.FUNÇÃO3}</CelulaEstilizada>
                             </LinhaEstilizada>,
                             <LinhaEstilizada key={`${index}-4`}>
                                 <CelulaEstilizada component="th" scope="row">
-                                    {formatDate(linha.Data4)}
+                                    {linha.DATA4}
                                 </CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Inicio4!==""?`de ${linha.Inicio3} as ${linha.Termino4}`:""}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Nome4}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.Funcao4}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.INICIO4?`de ${linha.INICIO3} as ${linha.TERMINO4}`:""}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.NOME4}</CelulaEstilizada>
+                                <CelulaEstilizada>{linha.FUNÇÃO4}</CelulaEstilizada>
                             </LinhaEstilizada>
                         ]
                     ))}

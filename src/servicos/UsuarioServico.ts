@@ -124,15 +124,15 @@ export async function pegarFolgasUsuario(re: string) {
 
   try {
     const url = `https://script.google.com/macros/s/AKfycbw2wgOYgJ5s0BvcEaVXDWDChclWxVsPKJmR7wcAdO-NiiPHlKpjtpSgPAA0bsEMcB4/exec?re=${encodeURIComponent(re)}`;
-    console.log(`o re que eu estou procurando é ${encodeURIComponent(re)}`)
-    console.log( `o endpoint chamdo foi ${url}`)
+    // console.log(`o re que eu estou procurando é ${encodeURIComponent(re)}`)
+    // console.log( `o endpoint chamdo foi ${url}`)
     const resultado = await apiDispensas.get(url, {
     });
 
     // console.log(`Chamando o endpoint DE FOLGA: ${url}`);
     // console.log("O RE é " + re);
     // console.log(`Resultado é DISPENSAS ${JSON.stringify(resultado.data.reornoDaSaida[0])}`);
-    console.log(`o resultado de folgas   é ${JSON.stringify(resultado.data.reornoDaSaida[0])}`)
+    // console.log(`o resultado de folgas   é ${JSON.stringify(resultado.data.reornoDaSaida[0])}`)
     return resultado.data.reornoDaSaida;
   } catch (error) {
     console.log( "deu erro na chamada de folgas")

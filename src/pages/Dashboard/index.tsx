@@ -105,7 +105,7 @@ export default function Dashboard() {
       <Titulo imagem="consulta">Escalas Previstas</Titulo>
       <Tabela escala={dadosEscalas} />
       <Titulo imagem="grafico">Folgas Agendadas</Titulo>
-      <Subtitulo>Agosto/24</Subtitulo>
+      {/* <Subtitulo>Agosto/24</Subtitulo> */}
       <TabelaFolga folga={folgasfuturas} />
       <Titulo imagem="avaliacao">Observações da ADM</Titulo>
       {/* <Avaliacao profissionais={profissionais} /> */}
