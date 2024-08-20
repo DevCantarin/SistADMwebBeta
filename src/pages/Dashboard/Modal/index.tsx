@@ -10,10 +10,16 @@ import IMike from "../../../types/IMIKE";
 import usePost from "../../../usePost";
 import autenticaStore from "../../../stores/autentica.store";
 import usuarioStore from "../../../stores/usuario.store";
-import { pegarDadosUsuarios } from "../../../servicos/UsuarioServico";
+import { pegarDadosUsuarios, pegaTodosUsuarios } from "../../../servicos/UsuarioServico";
 import { Usuario } from "../../../interfaces/Usuario";
-import { agendarFolgas } from "../../../servicos/FolgasServico";
+import { agendarFolgas, pegarTodasAsFolgas } from "../../../servicos/FolgasServico";
 import converterData from "../../../utils/ConverterData";
+import { setReactionScheduler } from "mobx/dist/internal";
+import { Efetivo } from "../../../interfaces/Efetivo";
+import { pegaTodoEfetivo } from "../../../servicos/EfetivoServico";
+import { wait } from "@testing-library/user-event/dist/utils";
+import { Folga } from "../../../interfaces/Folga";
+import { isNumber } from "util";
 
 const BoxCustomizado = styled(Box)`
   position: fixed;
@@ -47,26 +53,64 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
     const {usuario} = autenticaStore;
     const [dadosUsuarios, setDadosUsuarios] = useState<Usuario>({} as Usuario);
     const [mikeId, setMikeId] = useState('');
+    const [re, setRe] = useState("");
+    const [nome, setNome] = useState("");
+    const [grad, setGrad] = useState("");
+    const [justificativa, setJustificativa] = useState("");
+    const [folgasAgendadas, setFolgasAgendadas] = useState<Folga[]>([])
+    const [folgasAgendadasDoMes, setfolgasAgendadasDoMes] = useState<Folga[]>([])
 
-    useEffect(() => {
+
+    const [efetivo, setEfetivo] = useState<Efetivo[]>([]);
+
+
+    
+
+      useEffect(() => {
         async function fetchData() {
-            try {
-                const storedMikeId = await autenticaStore.usuario.id;
-                if (!storedMikeId) return;
-
-                setMikeId(storedMikeId);
-
-                const resultado = await pegarDadosUsuarios(storedMikeId);
-                if (resultado) {
-                    setDadosUsuarios(resultado);
-                    usuarioStore.atualizaFuncionario(dadosUsuarios)
-                }
-            } catch (error) {
-                console.error("Erro ao buscar dados do usuário:", error);
+          try {     
+            const resultado = await pegaTodoEfetivo();
+            if (resultado) {
+                // console.log(`o resultade de efetivo é${JSON.stringify(resultado)}`)
+              setEfetivo(resultado);
+              setRe(usuarioStore.usuario.re+"-"+usuarioStore.usuario.dig)
             }
+          } catch (error) {
+            console.error("Erro ao buscar dados do usuário:", error);
+          }
         }
         fetchData();
-    }, []);
+      }, [open]);
+
+      useEffect(() => {
+        async function fetchData() {
+          try {     
+            const resultado = await pegarTodasAsFolgas();
+            if (resultado) {
+                // console.log(`o resultade deeeeeee fogas é${JSON.stringify(resultado)}`)
+              setFolgasAgendadas(resultado);
+
+            }
+          } catch (error) {
+            console.error("Erro ao buscar dados do usuário:", error);
+          }
+        }
+        fetchData();
+      }, [open]);
+
+      useEffect(() => {
+        async function fetchData() {
+            const encontrado = efetivo.find(mike => `${mike.RE}-${mike.DIG}` === re);
+                if (encontrado) {
+                    setNome(encontrado.QRA);
+                    setGrad(encontrado.GRAD)
+                } else {
+                    setNome('')
+                    setGrad('')
+                }
+        }
+        fetchData();
+      }, [re]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -74,7 +118,32 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
              if(new Date(dataFolga) <=new Date()){
                 alert("A Data da Folga deve Ser Para o Futuro")
                  return
-            } 
+            }
+        if(motivoFolga==="FOLGA MENSAL BG 101/23"){
+            const folgasDoMes = folgasAgendadas.filter((folga) => {
+            const dataFolgaVerificada = new Date(converterData(folga.DATA));
+            const dataComparada = new Date(dataFolga);
+    
+            // console.log(`dataFolgaVerificada: ${dataFolgaVerificada}`);
+            // console.log(`dataComparada: ${dataComparada}`);
+    
+            if (isNaN(dataFolgaVerificada.getTime()) || isNaN(dataComparada.getTime())) {
+                console.error("Uma ou ambas as datas são inválidas após a conversão.");
+            }           
+            return folga.RE === re && folga.MOTIVO === "FOLGA MENSAL BG 101/23" && folga.APROVA==="SIM" && dataFolgaVerificada.getMonth() === dataComparada.getMonth();
+                });
+                console.log(JSON.stringify(folgasDoMes))
+                setfolgasAgendadasDoMes(folgasDoMes)
+                if(folgasDoMes.length>0){
+                    alert(`${folgasDoMes.map(folga=> folga.NOME)} já tem uma folga mesal aprovada em ${folgasDoMes.map(folga=> folga.DATA)}`)
+                    setRe("")
+                    return
+                }
+        }
+        
+            agendarFolgas(dataFolga,grad,re,nome,motivoFolga,quantidade,justificativa)
+            setRe("")
+
 
             
             
@@ -82,6 +151,8 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
             alert(`Deu RUIM ${error}`)
         }
     }
+
+
 
     return (
         <>
@@ -95,12 +166,12 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
                     <Titulo>Cadastre o especialista inserindo os dados abaixo:</Titulo>
                     <form onSubmit={handleSubmit}>
                         <Container>
-                            <CampoDigitacao tipo="text" label="Nome" valor={usuarioStore.usuario.nome} placeholder="Digite o completo"/>
-                            <CampoDigitacao tipo="email" label="Email" valor={usuarioStore.usuario.email} placeholder="Digite o email"/>
-                            <CampoDigitacao tipo="text" label="Graduação" valor={usuarioStore.usuario.grad} placeholder="Digite a graduação "/>
-                            <CampoDigitacao tipo="text" label="RE" valor={`${usuarioStore.usuario.re}-${usuarioStore.usuario.dig}`} placeholder="Insira o RE com Digito '123456-7'"/>
+                            <CampoDigitacao tipo="text" label="RE" valor={re} placeholder="Insira o RE com Digito '123456-7'" onChange={setRe}/>
+                            <CampoDigitacao tipo="text" label="Nome" valor={nome} placeholder=""/>
+                            {/* <CampoDigitacao tipo="email" label="Email" valor={usuarioStore.usuario.email} placeholder="Digite o email"/> */}
+                            <CampoDigitacao tipo="text" label="Graduação" valor={grad} placeholder=""/>
                             <CampoDigitacao tipo="date" label="Data do inicio da Folga" valor={dataFolga} placeholder="Digite a data de inicio da Folga" onChange={setDataFolga} />
-                            <CampoDigitacao tipo="text" label="Quantidade de Dias" valor={quantidade} placeholder="digite a quantidade de dias de Folga" onChange={setQuantidade} />
+                            <CampoDigitacao tipo="number" label="Quantidade de Dias" valor={quantidade} placeholder="digite a quantidade de dias de Folga" onChange={setQuantidade} />
                             <Subtitulo>Selecione o Motivo da Folga:</Subtitulo>
                             <FormGroup>
                                 <RadioGroup value={motivoFolga} onChange={(e) => setMotivoFolga(e.target.value)}>
@@ -118,6 +189,8 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
                                     <FormControlLabel control={<Radio />} label="FOLGA FLAGRANTE" value="FOLGA FLAGRANTE" />
                                 </RadioGroup>
                             </FormGroup>
+                            {motivoFolga==="COMPENSAÇÃO OPERACIONAL" && 
+                            <CampoDigitacao tipo="number" label="MOTIVO DA COMPENSAÇÃO OPERACIONAL" valor={justificativa} placeholder="digite o motivo da compensação operacional" onChange={setJustificativa} />}
                         </Container>
                         <BotaoCustomizado>Cadastrar</BotaoCustomizado>
                     </form>

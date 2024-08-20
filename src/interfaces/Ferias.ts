@@ -1,13 +1,14 @@
 export interface Ferias{
-    id: string
-    posto:string
-    re:string
-    qra: string
-    quantidade: string
-    data_inicial: string
-    data_final: string
-    data_inicial2: string
-    data_final2: string
-    createdAt:string
-    updatedAt:string 
- }
+    GRAD: string;
+    RE: string;
+    DIGITO: string;
+    REDIG: string;
+    POLICIAL: string;
+    QRA: string;
+    QUANTIDADE: string;
+    INICIO: string;
+    TERMINO: string;
+    INICIO2?: string;
+    TERMINO2?: string;
+    ID?: string;
+    }

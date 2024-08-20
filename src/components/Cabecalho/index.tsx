@@ -4,6 +4,11 @@ import perfil from './assets/perfil.png';
 import pesquisa from './assets/search.png';
 import autenticaStore from '../../stores/autentica.store';
 import usuarioStore from '../../stores/usuario.store';
+import { useEffect, useState } from 'react';
+import { Usuario } from '../../interfaces/Usuario';
+import { pegarDadosUsuarios } from '../../servicos/UsuarioServico';
+
+
 
 
 
@@ -69,17 +74,46 @@ const LogoEstilizado = styled.img`
 `
 
 function Cabecalho() {
+    const [dadosUsuarios, setDadosUsuarios] = useState<Usuario>()
+    const [mikeId, setMikeId] = useState('');
+
+    useEffect(() => {
+        async function fetchData() {
+          try {
+            const storedMikeId = await autenticaStore.usuario.id;
+            if (!storedMikeId) return;
+    
+            setMikeId(storedMikeId);
+    
+            const resultado = await pegarDadosUsuarios(storedMikeId);
+            if (resultado) {
+              setDadosUsuarios(resultado);
+            }
+          } catch (error) {
+            console.error("Erro ao buscar dados do usuário:", error);
+          }
+        }
+        fetchData();
+      }, [dadosUsuarios]);
+
+
+
+
     const handleLogout = () => {
         autenticaStore.logout();
+
+
+
     };
 
     return (
         <CabecalhoEstilizado>
             <LogoEstilizado src={logo} alt="do 14º BPM/M" />
+            
             <Container>
                 {autenticaStore.estaAutenticado
                     ? <>
-                        <p>{usuarioStore.usuario.nome}</p>
+                        <p>{`${dadosUsuarios?.grad} ${dadosUsuarios?.nome}`}</p>
                         <img src={perfil} alt="imagem de perfil do usuário" />
                         <LinkEstilizado href="/" onClick={handleLogout}>Sair</LinkEstilizado>
                     </>

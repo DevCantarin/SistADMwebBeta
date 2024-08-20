@@ -1,7 +1,7 @@
 import { Usuario } from "../interfaces/Usuario";
 import autenticaStore from "../stores/autentica.store";
 import api from "./api";
-import apiDispensas from "./apiDispensass";
+
 
 export async function pegaTodosUsuarios() {
   const token = await autenticaStore.usuario.token;
@@ -137,6 +137,38 @@ export async function pegarFolgasUsuario(re: string) {
     return null;
   }
 }
+
+export async function pegarFeriasUsuario(re: string) {
+  const token = await autenticaStore.usuario.token;
+
+  if (!token) {
+    console.log('Token não encontrado no armazenamento local.');
+    return null;
+  }
+
+  if (!re) {
+    console.log("re Nulo");
+    return null;
+  }
+
+  try {
+    const resultado = await api.get(`/gferias/re/${re}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    // console.log("O RE é  escalas" + re);
+    // console.log(`Resultado é ${JSON.stringify(resultado.data.feriasRE[0])}`);
+    return resultado.data.feriasRE;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+
+
 
 
 // export async function pegarFeriasUsuario(re: string) {

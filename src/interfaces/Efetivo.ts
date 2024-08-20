@@ -1,8 +1,9 @@
 export interface Efetivo{
-    grad: string;
-    re: string;
-    dig: string;
-    nome: string;
-    qra: string;
-    equipe: string
+    ID?: string
+    GRAD: string;
+    RE: string;
+    DIG: string;
+    NOME: string;
+    QRA: string;
+    EQUIPE: string
 }

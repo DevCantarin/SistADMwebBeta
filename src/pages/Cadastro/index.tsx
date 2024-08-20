@@ -4,7 +4,6 @@ import { Step, StepLabel, Stepper } from "@mui/material";
 import { useState } from 'react';
 import Botao from "../../components/Botao";
 import CampoDigitacao from "../../components/CampoDigitacao";
-import IClinica from "../../types/IClinica";
 import usePost from "../../usePost";
 import { useNavigate } from "react-router-dom";
 import { Usuario } from "../../interfaces/Usuario";

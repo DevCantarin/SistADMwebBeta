@@ -1,9 +1,8 @@
-import axios from "axios";
 import api from "./api";
 import apiDispensas from "./apiDispensass";
 import autenticaStore from "../stores/autentica.store";
 
-export async function pegarTodasAsFolgas(){
+export async function pegaTodasAsFerias(){
 
   const token = await autenticaStore.usuario.token;
 
@@ -94,7 +93,7 @@ export async function cancelarFolgas(folgaId: string) {
 }
 
 
-export async function pegarFolgasUsuario(re: string) {
+export async function pegaFeriasUsuario(re: string) {
   if (!re) {
     console.log("re Nulo");
     return null;
