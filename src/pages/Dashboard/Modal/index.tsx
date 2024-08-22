@@ -163,7 +163,7 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
                 aria-describedby="modal-modal-description"
             >
                 <BoxCustomizado>
-                    <Titulo>Cadastre o especialista inserindo os dados abaixo:</Titulo>
+                    <Titulo>Cadastre o nome do Mike:</Titulo>
                     <form onSubmit={handleSubmit}>
                         <Container>
                             <CampoDigitacao tipo="text" label="RE" valor={re} placeholder="Insira o RE com Digito '123456-7'" onChange={setRe}/>
