@@ -28,7 +28,7 @@ const LinhaEstilizada = styled(TableRow)(() => ({
     }
 }));
 
-// Função para definir a cor da célula de aprovação
+
 function getAprovacaoColor(aprovacao: string) {
     if (aprovacao.toLowerCase() === 'sim') {
         return 'green';

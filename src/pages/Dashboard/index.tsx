@@ -223,14 +223,19 @@ export default function Dashboard() {
       <Titulo imagem="grafico">Folgas Agendadas</Titulo>
       {/* <Subtitulo>Agosto/24</Subtitulo> */}
       {loadingFolgas===false?<TabelaFolga folga={folgasfuturas} />:<FadeLoader loading={loadingFolgas}/>}
-      <Titulo imagem="avaliacao">{`${usuarioStore.usuario.funcao}, Folgas do Efetivo sob seu Comando`}</Titulo>
+      
       
       {(usuarioStore.usuario.funcao === "CGP1" ||
           usuarioStore.usuario.funcao === "CGP2" ||
           usuarioStore.usuario.funcao === "CGP3" ||
           usuarioStore.usuario.funcao === "CGP4" ||
           usuarioStore.usuario.funcao === "ADMINISTRADOR") && (
-          loadingFolgasSubordinados ===false?<TabelaFolga folga={folgaDosSubordinados} />:<FadeLoader loading={loadingFolgasSubordinados}/>
+            <>
+            <Titulo imagem="avaliacao">{`${usuarioStore.usuario.funcao}, Folgas do Efetivo sob seu Comando`}</Titulo>
+            {
+              loadingFolgasSubordinados ===false?<TabelaFolga folga={folgaDosSubordinados} />:<FadeLoader loading={loadingFolgasSubordinados}/>
+            }
+          </>
       )}
       {/* <Avaliacao profissionais={profissionais} /> */}
     </Container>
