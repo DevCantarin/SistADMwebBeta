@@ -22,7 +22,13 @@ import { Efetivo } from "../../interfaces/Efetivo";
 import { pegaTodoEfetivo } from "../../servicos/EfetivoServico";
 import { pegarTodasAsFolgas } from "../../servicos/FolgasServico";
 import { Ferias } from "../../interfaces/Ferias";
+import CampoDigitacao from "../../components/CampoDigitacao";
+import styled from "styled-components";
 
+const CampaDePesquisa = styled.div`
+  width: 30vw;
+  margin-bottom: 1em;
+`
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
@@ -38,6 +44,8 @@ export default function Dashboard() {
   const [loadingEscala, setLoadingEscala] = useState(true)
   const [loadingFolgas, setLoadingFolgas] = useState(true)
   const [loadingFolgasSubordinados, setLoadingFolgasSubordinados] = useState(true)
+
+  const [reFiltrado, setReFiltrado] = useState("")
 
 
 
@@ -151,33 +159,40 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function folgas() {
-      try {     
-        const resultado:Folga[] = await pegarTodasAsFolgas();
+      try {
+        const resultado: Folga[] = await pegarTodasAsFolgas();
         if (resultado) {
-          // console.log(JSON.stringify(resultado))
+          // Filtra folgas do efetivo
           const folgasDoEfetivoDesseUsuario = resultado.filter(folga => {
             const reFolga = folga.RE.substring(0, 6);
-            const correspondente = efetivo.find(mike => mike.RE === reFolga);
-            return correspondente !== undefined;
+            return efetivo.some(mike => mike.RE === reFolga);
           });
-          
+  
+          // Filtra folgas futuras
           const folgasFuturas = folgasDoEfetivoDesseUsuario.filter((folga: Folga) => {
-            // Converte a data para o formato Date
             const folgaData = converterData(folga.DATA);
-            // Verifica se a data da folga é maior ou igual à data atual
             return folgaData >= new Date();
-            })
-        
-          setFolgasDosSubordinaos(folgasFuturas);
-          setLoadingFolgasSubordinados(false)
+          });
+  
+          if (reFiltrado) {
+            const folgasFiltradas = folgasFuturas.filter((folga: Folga) => {
+              return folga.RE.includes(reFiltrado); 
+            });
+            setFolgasDosSubordinaos(folgasFiltradas);
+          } else {
+            setFolgasDosSubordinaos(folgasFuturas);
+          }
+  
+          setLoadingFolgasSubordinados(false);
         }
       } catch (error) {
         console.error("Erro ao buscar dados do usuário:", error);
-        alert("erro no serividor. Tente novamente mais tarde")
+        alert("Erro no servidor. Tente novamente mais tarde.");
       }
     }
+  
     folgas();
-  }, [efetivo]);
+  }, [efetivo, reFiltrado]);  
 
 
   useEffect(() => {
@@ -205,7 +220,6 @@ export default function Dashboard() {
   
     
 
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -232,6 +246,15 @@ export default function Dashboard() {
           usuarioStore.usuario.funcao === "ADMINISTRADOR") && (
             <>
             <Titulo imagem="avaliacao">{`${usuarioStore.usuario.funcao}, Folgas do Efetivo sob seu Comando`}</Titulo>
+            <CampaDePesquisa>
+              <CampoDigitacao
+                tipo="texto"
+                label="Procura por RE"
+                valor={reFiltrado}
+                placeholder="Digite o RE procurado"
+                onChange={setReFiltrado}
+              />
+            </CampaDePesquisa>
             {
               loadingFolgasSubordinados ===false?<TabelaFolga folga={folgaDosSubordinados} />:<FadeLoader loading={loadingFolgasSubordinados}/>
             }
