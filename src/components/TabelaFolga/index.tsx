@@ -28,15 +28,15 @@ const LinhaEstilizada = styled(TableRow)(() => ({
     }
 }));
 
-function formatDate(date: any) {
-    return isValidDate(date) ? new Date(date).toLocaleDateString() : '';
+// Função para definir a cor da célula de aprovação
+function getAprovacaoColor(aprovacao: string) {
+    if (aprovacao.toLowerCase() === 'sim') {
+        return 'green';
+    } else if (aprovacao.toLowerCase() === 'não' || aprovacao.toLowerCase() === 'nao') {
+        return 'red';
+    }
+    return 'inherit'; // cor padrão
 }
-
-function isValidDate(date: any) {
-    const parsedDate = new Date(date);
-    return !isNaN(parsedDate.getTime());
-}
-
 
 function TabelaFolga({ folga }: { folga: Folga[] | null }) {
     return (
@@ -55,17 +55,17 @@ function TabelaFolga({ folga }: { folga: Folga[] | null }) {
                 </TableHead>
                 <TableBody>
                     {folga?.flatMap((linha, index) => (
-                        [
-                            <LinhaEstilizada key={`${index}-1`}>
-                                <CelulaEstilizada>{linha.GRAD}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.RE}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.NOME}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.DATA}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.QUANTIDADE}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.MOTIVO}</CelulaEstilizada>
-                                <CelulaEstilizada>{linha.APROVA}</CelulaEstilizada>
-                            </LinhaEstilizada>
-                        ]
+                        <LinhaEstilizada key={index}>
+                            <CelulaEstilizada>{linha.GRAD}</CelulaEstilizada>
+                            <CelulaEstilizada>{linha.RE}</CelulaEstilizada>
+                            <CelulaEstilizada>{linha.NOME}</CelulaEstilizada>
+                            <CelulaEstilizada>{linha.DATA}</CelulaEstilizada>
+                            <CelulaEstilizada>{linha.QUANTIDADE}</CelulaEstilizada>
+                            <CelulaEstilizada>{linha.MOTIVO}</CelulaEstilizada>
+                            <CelulaEstilizada style={{ color: getAprovacaoColor(linha.APROVA) }}>
+                                {linha.APROVA}
+                            </CelulaEstilizada>
+                        </LinhaEstilizada>
                     ))}
                 </TableBody>
             </Table>
