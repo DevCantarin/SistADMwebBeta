@@ -8,6 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Folga } from '../../interfaces/Folga';
+import { apiOwnKeys } from 'mobx/dist/internal';
 
 const CelulaEstilizada = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
@@ -30,12 +31,14 @@ const LinhaEstilizada = styled(TableRow)(() => ({
 
 
 function getAprovacaoColor(aprovacao: string) {
-    if (aprovacao.toLowerCase() === 'sim') {
-        return 'green';
-    } else if (aprovacao.toLowerCase() === 'não' || aprovacao.toLowerCase() === 'nao') {
-        return 'red';
+    if (aprovacao != null){
+        if (aprovacao.toLowerCase() === 'sim') {
+            return 'green';
+        } else if (aprovacao.toLowerCase() === 'não' || aprovacao.toLowerCase() === 'nao') {
+            return 'red';
+        }
+        return 'inherit'; // cor padrão
     }
-    return 'inherit'; // cor padrão
 }
 
 function TabelaFolga({ folga }: { folga: Folga[] | null }) {
