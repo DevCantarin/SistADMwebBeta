@@ -232,6 +232,9 @@ export default function Dashboard() {
         {feriasUsuario.length > 0 && feriasUsuario[0].INICIO && (
             <p>{`* Suas Férias estão marcadas para: de ${feriasUsuario[0].INICIO} a ${feriasUsuario[0].TERMINO}.`}</p>
         )}
+        {feriasUsuario.length > 0 && feriasUsuario[0].INICIO2 && (
+            <p>{`* Suas Férias estão marcadas para: de ${feriasUsuario[0].INICIO2} a ${feriasUsuario[0].TERMINO2}.`}</p>
+        )}
       <Titulo imagem="consulta">Escalas Previstas</Titulo>
       {loadingEscala===false ?<Tabela escala={dadosEscalas}/>:<FadeLoader loading={loadingEscala}/>}
       <Titulo imagem="grafico">Folgas Agendadas</Titulo>
