@@ -24,14 +24,15 @@ const Container = styled.div`
 `;
 
 interface Props {
-  valor: string;
+  valor: any;
   tipo: string;
   placeholder: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: any) => void;
   label?: string;
+  obrigatorio?: boolean; // Adicionando a prop obrigatoria como opcional
 }
 
-export default function CampoDigitacao({ valor, tipo, placeholder, onChange, label }: Props) {
+export default function CampoDigitacao({ valor, tipo, placeholder, onChange, label, obrigatorio }: Props) {
   return (
     <Container>
       {label && <Rotulo>{label}</Rotulo>}
@@ -40,7 +41,7 @@ export default function CampoDigitacao({ valor, tipo, placeholder, onChange, lab
         value={valor}
         placeholder={placeholder}
         onChange={(e) => onChange && onChange(e.target.value)}
-        required
+        required={obrigatorio} // Ajustando para que 'required' seja controlado pela prop 'obrigatorio'
       />
     </Container>
   );

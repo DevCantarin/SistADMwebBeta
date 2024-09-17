@@ -40,6 +40,7 @@ export default function Dashboard() {
   const [efetivo, setEfetivo] = useState<Efetivo[]>([]);
   const [folgaDosSubordinados, setFolgasDosSubordinaos] = useState<Folga[]>([]);
   const [feriasUsuario, setFeriasUsuario] = useState<Ferias[]>([] );
+  const [ds, setDs] =  useState<Folga[]>([])
 
   const [loadingEscala, setLoadingEscala] = useState(true)
   const [loadingFolgas, setLoadingFolgas] = useState(true)
@@ -81,9 +82,11 @@ export default function Dashboard() {
           return;
         }
   
-        const resultado = await pegarFolgasUsuario(`${dadosUsuarios.re}-${dadosUsuarios.dig}`);
+        const resultado:Folga[] = await pegarFolgasUsuario(`${dadosUsuarios.re}-${dadosUsuarios.dig}`);
         if (resultado) {
           setFolgasAgendadas(resultado);
+          const ds = resultado.filter((folga)=> folga.MOTIVO === "DISPENSA DO SERVIÇO" && folga.APROVA ==="SIM" )
+          setDs(ds)
 
         const folgasFuturas = resultado.filter((folga: Folga) => {
           // Converte a data para o formato Date
@@ -235,6 +238,7 @@ export default function Dashboard() {
         {feriasUsuario.length > 0 && feriasUsuario[0].INICIO2 && (
             <p>{`* Suas Férias estão marcadas para: de ${feriasUsuario[0].INICIO2} a ${feriasUsuario[0].TERMINO2}.`}</p>
         )}
+        {ds.length>0 && <p>{`* Você já usufruiu de ${ds.length} Dispensa(s) do Serviço`}</p>}
       <Titulo imagem="consulta">Escalas Previstas</Titulo>
       {loadingEscala===false ?<Tabela escala={dadosEscalas}/>:<FadeLoader loading={loadingEscala}/>}
       <Titulo imagem="grafico">Folgas Agendadas</Titulo>

@@ -59,6 +59,7 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
     const [justificativa, setJustificativa] = useState("");
     const [folgasAgendadas, setFolgasAgendadas] = useState<Folga[]>([])
     const [folgasAgendadasDoMes, setfolgasAgendadasDoMes] = useState<Folga[]>([])
+    const [ds, setDs] = useState<Folga[]>([])
 
 
     const [efetivo, setEfetivo] = useState<Efetivo[]>([]);
@@ -85,9 +86,10 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
       useEffect(() => {
         async function fetchData() {
           try {     
-            const resultado = await pegarTodasAsFolgas();
+            const resultado:Folga[] = await pegarTodasAsFolgas();
             if (resultado) {
-                // console.log(`o resultade deeeeeee fogas é${JSON.stringify(resultado)}`)
+              const ds = resultado.filter((folga)=> folga.MOTIVO = "DISPENSA DO SERVIÇO" )
+              setDs(ds)
               setFolgasAgendadas(resultado);
 
             }
@@ -166,12 +168,12 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
                     <Titulo>Cadastre o nome do Mike:</Titulo>
                     <form onSubmit={handleSubmit}>
                         <Container>
-                            <CampoDigitacao tipo="text" label="RE" valor={re} placeholder="Insira o RE com Digito '123456-7'" onChange={setRe}/>
-                            <CampoDigitacao tipo="text" label="Nome" valor={nome} placeholder=""/>
+                            <CampoDigitacao tipo="text" label="RE" valor={re} obrigatorio={true} placeholder="Insira o RE com Digito '123456-7'" onChange={setRe}/>
+                            <CampoDigitacao tipo="text" label="Nome" valor={nome} obrigatorio={true} placeholder=""/>
                             {/* <CampoDigitacao tipo="email" label="Email" valor={usuarioStore.usuario.email} placeholder="Digite o email"/> */}
-                            <CampoDigitacao tipo="text" label="Graduação" valor={grad} placeholder=""/>
-                            <CampoDigitacao tipo="date" label="Data do inicio da Folga" valor={dataFolga} placeholder="Digite a data de inicio da Folga" onChange={setDataFolga} />
-                            <CampoDigitacao tipo="number" label="Quantidade de Dias" valor={quantidade} placeholder="digite a quantidade de dias de Folga" onChange={setQuantidade} />
+                            <CampoDigitacao tipo="text" label="Graduação" valor={grad} obrigatorio={true} placeholder=""/>
+                            <CampoDigitacao tipo="date" label="Data do inicio da Folga" valor={dataFolga} obrigatorio={true} placeholder="Digite a data de inicio da Folga" onChange={setDataFolga} />
+                            <CampoDigitacao tipo="number" label="Quantidade de Dias" valor={quantidade} obrigatorio={true} placeholder="digite a quantidade de dias de Folga" onChange={setQuantidade} />
                             <Subtitulo>Selecione o Motivo da Folga:</Subtitulo>
                             <FormGroup>
                                 <RadioGroup value={motivoFolga} onChange={(e) => setMotivoFolga(e.target.value)}>
@@ -190,7 +192,7 @@ export default function ModalCadastro({ open, handleClose }: { open: boolean, ha
                                 </RadioGroup>
                             </FormGroup>
                             {motivoFolga==="COMPENSAÇÃO OPERACIONAL" && 
-                            <CampoDigitacao tipo="number" label="MOTIVO DA COMPENSAÇÃO OPERACIONAL" valor={justificativa} placeholder="digite o motivo da compensação operacional" onChange={setJustificativa} />}
+                            <CampoDigitacao tipo="number" label="MOTIVO DA COMPENSAÇÃO OPERACIONAL" obrigatorio ={true} valor={justificativa} placeholder="digite o motivo da compensação operacional" onChange={setJustificativa} />}
                         </Container>
                         <BotaoCustomizado>Cadastrar</BotaoCustomizado>
                     </form>

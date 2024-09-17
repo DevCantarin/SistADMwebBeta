@@ -42,6 +42,7 @@ const Formulario = styled.form`
 
 const BotaoCustomizado = styled(Botao)`
   width: 50%;
+  margin: 5em;
 `;
 
 const Container = styled.div`

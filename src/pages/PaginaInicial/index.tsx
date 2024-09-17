@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import escalaImg from "./Imagens/escala.jpeg"
-import Atividades from "./Atividades";
-// import Banner from "./Banner";
-import Depoimentos from "./Depoimentos";
-// import Pesquisa from "./Pesquisa";
+import RSO from "../RSO/rso.png";
 
 const Container = styled.section`
 display: flex;
@@ -11,10 +8,17 @@ flex-direction: column;
 align-items: center;
 padding: 2em;
 `
+const ContainerIcones = styled.section`
+display: flex;
+flex-direction: line;
+align-items: center;
+padding: 5em;
+`
 const LinkEstilizado = styled.a`
  color: var(--azul-escuro);
  font-weight: 700;
  align-items: center;
+ margin: 0 10px;
    p {
     text-align: center;
   }
@@ -29,7 +33,17 @@ align-items: center;
 `
 
 const EscalaStyled = styled.img`
+  width: 20em;  
+  height: 20em; 
+  object-fit: cover;
+//   border: 2px solid var(--azul-escuro);
+`
 
+const RSOStyled = styled.img`
+  width: 20em;  
+  height: 20em; 
+  object-fit: cover; 
+//   border: 2px solid var(--azul-escuro);
 `
 
 export default function PaginaInicial() {
@@ -37,10 +51,16 @@ export default function PaginaInicial() {
         <>
             {/* <Banner /> */}
             <Container>
-                <LinkEstilizado href="/dashboard">
-                    <p>Verificar Escala</p>
-                    <EscalaStyled src= {escalaImg}/>
-                </LinkEstilizado>
+                <ContainerIcones>
+                    <LinkEstilizado href="/dashboard">
+                        <p>Verificar Escala</p>
+                        <EscalaStyled src= {escalaImg}/>
+                    </LinkEstilizado>
+                    <LinkEstilizado href="/rso">
+                        <p>RSO</p>
+                        <RSOStyled src= {RSO}/>
+                    </LinkEstilizado>
+                </ContainerIcones>
                 {/* <Pesquisa /> */}
                 {/* <Atividades />
                 <Depoimentos /> */}

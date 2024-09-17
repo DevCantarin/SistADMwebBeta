@@ -65,7 +65,7 @@ export default function Login() {
       const mikeId = tokenDecodificado.id;
       await autenticaStore.login({email: email , token: accessToken, id: mikeId}); 
 
-      navigate('/dashboard')
+      navigate('/')
     } else {
       alert("deu ruim")
     }

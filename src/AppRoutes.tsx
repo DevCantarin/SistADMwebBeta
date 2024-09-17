@@ -6,6 +6,13 @@ import PaginaBaseFormulario from "./pages/PaginaBaseFormulario";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import RotaPrivada from "./utils/RotaPrivada";
+import RSO from "./pages/RSO";
+import RSOEquipe from "./pages/RSO/Paginas/Equipe.txs";
+import RSOViatura from "./pages/RSO/Paginas/Viatura";
+import RSOInfomacoes from "./pages/RSO/Paginas/Iformacoes.txs";
+import RSOPessoas from "./pages/RSO/Paginas/Pessoas";
+import RSOVeiculos from "./pages/RSO/Paginas/Pessoas copy";
+
 
 function AppRoutes() {
     return (
@@ -15,6 +22,12 @@ function AppRoutes() {
             <Route index element={<PaginaInicial />} />
             <Route element={<RotaPrivada />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/rso" element={<RSO />} />
+            <Route path="/rso/equipe" element={<RSOEquipe />} />
+            <Route path="/rso/viatura" element={<RSOViatura />} />
+            <Route path="/rso/informacoes" element={<RSOInfomacoes />} />
+            <Route path="/rso/pessoas" element={<RSOPessoas />} />
+            <Route path="/rso/veiculos" element={<RSOVeiculos />} />
             </Route>
             </Route>
             <Route path="/" element={<PaginaBaseFormulario />}>

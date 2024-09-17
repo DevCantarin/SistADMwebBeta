@@ -108,13 +108,15 @@ function Cabecalho() {
 
     return (
         <CabecalhoEstilizado>
-            <LogoEstilizado src={logo} alt="do 14º BPM/M" />
+            <LinkEstilizado href="/">
+              <LogoEstilizado src={logo} alt=" brasão do 14º BPM/M" />
+            </LinkEstilizado>
             
             <Container>
                 {autenticaStore.estaAutenticado
                     ? <>
                         <p>{`${dadosUsuarios?.grad} ${dadosUsuarios?.nome}`}</p>
-                        <img src={perfil} alt="imagem de perfil do usuário" />
+                        <img src={perfil}  alt="imagem de perfil do usuário" />                        
                         <LinkEstilizado href="/" onClick={handleLogout}>Sair</LinkEstilizado>
                     </>
                     : <>
