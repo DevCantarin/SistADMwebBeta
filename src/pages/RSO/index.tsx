@@ -54,7 +54,7 @@ const RSOOpcoes = [
         titulo: "Ocorrencias",
         imagem: ocorrencia,
         alt: "icone de um bloico de notass",
-        pagina:""
+        pagina:"/rso/ocorrencias"
     },
     {   id: 7,
         titulo: "Relatório",

@@ -12,6 +12,7 @@ import RSOViatura from "./pages/RSO/Paginas/Viatura";
 import RSOInfomacoes from "./pages/RSO/Paginas/Iformacoes.txs";
 import RSOPessoas from "./pages/RSO/Paginas/Pessoas";
 import RSOVeiculos from "./pages/RSO/Paginas/Pessoas copy";
+import RSOOcorrencias from "./pages/RSO/Paginas/Ocorrencias";
 
 
 function AppRoutes() {
@@ -28,6 +29,7 @@ function AppRoutes() {
             <Route path="/rso/informacoes" element={<RSOInfomacoes />} />
             <Route path="/rso/pessoas" element={<RSOPessoas />} />
             <Route path="/rso/veiculos" element={<RSOVeiculos />} />
+            <Route path="/rso/ocorrencias" element={<RSOOcorrencias />} />
             </Route>
             </Route>
             <Route path="/" element={<PaginaBaseFormulario />}>
