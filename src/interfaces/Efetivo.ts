@@ -5,5 +5,8 @@ export interface Efetivo{
     DIG: string;
     NOME: string;
     QRA: string;
-    EQUIPE: string
+    EQUIPE: string;
+    USER?: string;
+    SAT?: string;
+    VTR?: string
 }
